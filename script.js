@@ -34,7 +34,7 @@ function addTodo(title, completed) {
 
   //append todo to HTML...
   if (inputAdd.value === "") {
-    alert("ใส่อะไรไปก่อนกด Enter นะไอ่ต้าว");
+    alert("ใส่ข้อมูลก่อนนะครับ");
   } else {
     const list = document.getElementById("todo-container");
     div.appendChild(span);
