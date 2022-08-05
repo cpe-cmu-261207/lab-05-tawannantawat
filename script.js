@@ -4,8 +4,10 @@ const todoCtn = document.getElementById("todo-container");
 inputAdd.onkeyup = (event) => {
   if (event.key !== "Enter") return;
   //your code here
-  else console.log(inputAdd.value);
-  addTodo(inputAdd.value, 0);
+  //console.log(inputAdd.value);
+  else if (inputAdd.value === "") {
+    alert("ใส่ข้อมูลก่อนนะครับ");
+  } else addTodo(inputAdd.value, false);
 };
 
 function addTodo(title, completed) {
@@ -33,21 +35,18 @@ function addTodo(title, completed) {
   //your code here
 
   //append todo to HTML...
-  if (inputAdd.value === "") {
-    alert("ใส่ข้อมูลก่อนนะครับ");
-  } else {
-    const list = document.getElementById("todo-container");
-    div.appendChild(span);
-    div.appendChild(doneBtn);
-    div.appendChild(deleteBtn);
-    list.insertBefore(div, list.children[0]);
+  const list = document.getElementById("todo-container");
+  div.appendChild(span);
+  div.appendChild(doneBtn);
+  div.appendChild(deleteBtn);
+  list.insertBefore(div, list.children[0]);
 
-    document.getElementById("input-add-todo").value = "";
-  }
-
+  document.getElementById("input-add-todo").value = "";
+  //}
   //define buttons event...
   doneBtn.onclick = function () {
     doneTask();
+    saveTodo();
   };
 
   function doneTask() {
@@ -66,31 +65,54 @@ function addTodo(title, completed) {
 
   deleteBtn.onclick = function () {
     deleteTask();
+    saveTodo();
   };
 
   function deleteTask() {
-    div.removeChild(span);
-    div.removeChild(deleteBtn);
-    div.removeChild(doneBtn);
+    div.remove();
   }
 
   saveTodo();
 }
 
 function saveTodo() {
-  console.log("saveTodo Working");
   const data = [];
   for (const todoDiv of todoCtn.children) {
     //your code here
-    data.push(todoDiv);
+    const todoObj = {};
+    todoObj.title = todoDiv.children[0].innerText;
+    todoObj.completed =
+      todoDiv.children[0].style.textDecoration === "line-through";
+    data.push(todoObj);
   }
+  // console.log(data);
+
   //your code here
-  console.log(data);
+  if (JSON.parse(localStorage.getItem("index")) === null) {
+    const temp = [];
+    for (let i = 0; i < data.length; i++) {
+      temp.push(data[i]);
+    }
+    localStorage.setItem("index", JSON.stringify(temp));
+  } else if (JSON.parse(localStorage.getItem("index")) !== null) {
+    const temp = [];
+    for (let i = 0; i < data.length; i++) {
+      temp.push(data[i]);
+    }
+    localStorage.setItem("index", JSON.stringify(temp));
+  }
+  // console.log(JSON.parse(localStorage.getItem("index")) === null);
+
+  // console.log(temp);
 }
 
 function loadTodo() {
   //your code here
-  console.log("load working");
+  const y = JSON.parse(localStorage.getItem("index"));
+
+  for (let i = y.length - 1; i >= 0; i--) {
+    addTodo(y[i].title, y[i].completed);
+  }
 }
 
 loadTodo();
