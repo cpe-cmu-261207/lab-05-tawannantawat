@@ -31,6 +31,8 @@ function addTodo(title, completed) {
   deleteBtn.className = "btn btn-danger";
 
   //your code here
+
+  //append todo to HTML...
   if (inputAdd.value === "") {
     alert("ใส่อะไรไปก่อนกด Enter นะไอ่ต้าว");
   } else {
@@ -43,8 +45,34 @@ function addTodo(title, completed) {
     document.getElementById("input-add-todo").value = "";
   }
 
-  //append todo to HTML...
   //define buttons event...
+  doneBtn.onclick = function () {
+    doneTask();
+  };
+
+  function doneTask() {
+    if (completed == 0) {
+      completed = 1;
+    } else if (completed == 1) completed = 0;
+
+    div.removeChild(span);
+    div.removeChild(deleteBtn);
+    div.removeChild(doneBtn);
+    div.appendChild(span);
+    span.style.textDecoration = completed ? "line-through" : "";
+    div.appendChild(doneBtn);
+    div.appendChild(deleteBtn);
+  }
+
+  deleteBtn.onclick = function () {
+    deleteTask();
+  };
+
+  function deleteTask() {
+    div.removeChild(span);
+    div.removeChild(deleteBtn);
+    div.removeChild(doneBtn);
+  }
 
   saveTodo();
 }
@@ -53,8 +81,8 @@ function saveTodo() {
   console.log("saveTodo Working");
   const data = [];
   for (const todoDiv of todoCtn.children) {
-    data.push(todoDiv);
     //your code here
+    data.push(todoDiv);
   }
   //your code here
   console.log(data);
